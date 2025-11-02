@@ -1,3 +1,7 @@
+---
+layout: default
+title: 隐私政策
+---
 # 隐私政策
 
 ## 政策摘要
