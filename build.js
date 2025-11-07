@@ -77,8 +77,39 @@ function processDir(currentDir) {
   <!-- 引入 GitHub 官方 Markdown 样式，和 GitHub Pages 一致 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css">
   <style>
-    .markdown-body { max-width: 800px; margin: 0 auto; padding: 2rem; }
-  </style>
+  body { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 2rem; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    line-height: 1.6; 
+    background: #121212; /* 深色背景 */
+    color: #e0e0e0; /* 浅色文字 */
+  }
+  h1, h2, h3 { 
+    border-bottom: 1px solid #333; 
+    padding-bottom: 0.3rem; 
+    color: #fff; /* 标题更亮 */
+  }
+  code { 
+    background: #2d2d2d; 
+    padding: 0.2rem 0.4rem; 
+    border-radius: 4px; 
+    color: #ccc; 
+  }
+  pre { 
+    background: #2d2d2d; 
+    padding: 1rem; 
+    border-radius: 4px; 
+    overflow-x: auto; 
+    color: #ccc; 
+  }
+  blockquote { 
+    border-left: 4px solid #444; 
+    padding-left: 1rem; 
+    color: #aaa; 
+  }
+</style>
 </head>
 <body>
   <div class="markdown-body">${htmlContent}</div>
