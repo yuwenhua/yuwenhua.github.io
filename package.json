@@ -1,0 +1,10 @@
+{
+  "name": "md-to-html",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node build.js"  // 构建命令：执行后面的 build.js 脚本
+  },
+  "dependencies": {
+    "marked": "^12.0.0"  // Markdown 解析工具（稳定版本）
+  }
+}
