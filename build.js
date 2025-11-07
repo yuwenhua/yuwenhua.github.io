@@ -9,7 +9,7 @@ const distDir = './dist';
 
 // 需要排除的文件/目录（无需处理的文件）
 const excludeList = [
-  '.git',          // 版本控制目录，跳过
+  '.git',          // 版本控制目录，跳过 
   'dist',          // 输出目录，避免递归复制
   'node_modules',  // npm 依赖目录，无需部署
   '.github',       // GitHub 配置目录，无需部署
