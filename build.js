@@ -72,7 +72,7 @@ function processDir(currentDir) {
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>${path.basename(file, '.md')}</title>
   <!-- 引入 GitHub 官方 Markdown 样式，和 GitHub Pages 一致 -->
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css"> -->
@@ -80,45 +80,59 @@ function processDir(currentDir) {
   <link rel="stylesheet" href="/css/github-markdown.min.css">
  <!-- white theme -->
 <style>
+  /* 页面整体：宽度100%，无额外边距 */
   body { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 2rem; 
+    width: 100%; 
+    margin: 0; 
+    padding: 0; 
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
     line-height: 1.6; 
-    background: #fff; /* 页面整体背景（白色） */
-    color: #333; /* 页面默认文字色（黑色） */
+    background: #fff; 
+    color: #333; 
   }
-  /* 关键：修改文章容器的背景和文字色，覆盖默认样式 */
+  /* 文章容器：宽度100%，仅保留必要内边距 */
   .markdown-body { 
-    max-width: 800px; 
+    width: 100%; 
+    max-width: 800px; /* 大屏时限制最大宽度，避免内容过宽 */
     margin: 0 auto; 
-    padding: 2rem; 
-    background: #fff !important; /* 文章背景强制白色（!important 确保优先级） */
-    color: #333 !important; /* 文章文字强制黑色 */
+    padding: 1rem; /* 移动端内边距缩小，增加内容显示区域 */
+    box-sizing: border-box; /* 确保内边距不撑大容器 */
+    background: #fff !important; 
+    color: #333 !important; 
   }
+  /* 标题：适配移动端字号 */
   h1, h2, h3 { 
+    font-size: 1.8rem; /* 移动端标题适当缩小，避免换行过多 */
     border-bottom: 1px solid #eee; 
     padding-bottom: 0.3rem; 
-    color: #222 !important; /* 标题文字更黑，更醒目 */
+    color: #222 !important; 
   }
+  /* 段落文字：行高和字号优化 */
+  p {
+    font-size: 1rem;
+    line-height: 1.8; /* 行高增加，提升可读性 */
+  }
+  /* 代码和引用：保持样式同时适配宽度 */
   code { 
+    font-size: 0.9rem; 
     background: #f5f5f5 !important; 
     padding: 0.2rem 0.4rem; 
     border-radius: 4px; 
-    color: #333 !important; /* 代码文字色 */
+    color: #333 !important; 
   }
   pre { 
+    font-size: 0.9rem; 
     background: #f5f5f5 !important; 
     padding: 1rem; 
     border-radius: 4px; 
     overflow-x: auto; 
-    color: #333 !important; /* 代码块文字色 */
+    color: #333 !important; 
   }
   blockquote { 
+    font-size: 0.95rem; 
     border-left: 4px solid #eee; 
     padding-left: 1rem; 
-    color: #666 !important; /* 引用文字色 */
+    color: #666 !important; 
   }
 </style>
 </head>
