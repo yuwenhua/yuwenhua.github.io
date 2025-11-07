@@ -2,9 +2,9 @@
   "name": "md-to-html",
   "version": "1.0.0",
   "scripts": {
-    "build": "node build.js"  
+    "build": "node build.js"
   },
   "dependencies": {
-    "marked": "^12.0.0"  
+    "marked": "^12.0.0"
   }
 }
