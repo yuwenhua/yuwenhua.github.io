@@ -75,7 +75,9 @@ function processDir(currentDir) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${path.basename(file, '.md')}</title>
   <!-- 引入 GitHub 官方 Markdown 样式，和 GitHub Pages 一致 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css"> -->
+  <!-- 本地引用 GitHub Markdown 样式（无需依赖 CDN） -->
+  <link rel="stylesheet" href="/css/github-markdown.min.css">
   <style>
   body { 
     max-width: 800px; 
