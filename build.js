@@ -86,28 +86,39 @@ function processDir(currentDir) {
     padding: 2rem; 
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
     line-height: 1.6; 
-    background: #fff; /* 白色背景 */
-    color: #333; /* 黑色文字 */
+    background: #fff; /* 页面整体背景（白色） */
+    color: #333; /* 页面默认文字色（黑色） */
+  }
+  /* 关键：修改文章容器的背景和文字色，覆盖默认样式 */
+  .markdown-body { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 2rem; 
+    background: #fff !important; /* 文章背景强制白色（!important 确保优先级） */
+    color: #333 !important; /* 文章文字强制黑色 */
   }
   h1, h2, h3 { 
     border-bottom: 1px solid #eee; 
     padding-bottom: 0.3rem; 
+    color: #222 !important; /* 标题文字更黑，更醒目 */
   }
   code { 
-    background: #f5f5f5; 
+    background: #f5f5f5 !important; 
     padding: 0.2rem 0.4rem; 
     border-radius: 4px; 
+    color: #333 !important; /* 代码文字色 */
   }
   pre { 
-    background: #f5f5f5; 
+    background: #f5f5f5 !important; 
     padding: 1rem; 
     border-radius: 4px; 
     overflow-x: auto; 
+    color: #333 !important; /* 代码块文字色 */
   }
   blockquote { 
     border-left: 4px solid #eee; 
     padding-left: 1rem; 
-    color: #666; 
+    color: #666 !important; /* 引用文字色 */
   }
 </style>
 </head>
