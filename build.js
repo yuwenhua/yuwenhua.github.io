@@ -78,6 +78,7 @@ function processDir(currentDir) {
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css"> -->
   <!-- 本地引用 GitHub Markdown 样式（无需依赖 CDN） -->
   <link rel="stylesheet" href="/css/github-markdown.min.css">
+  <!-- black theme
   <style>
   body { 
     max-width: 800px; 
@@ -110,6 +111,39 @@ function processDir(currentDir) {
     border-left: 4px solid #444; 
     padding-left: 1rem; 
     color: #aaa; 
+  }
+</style>
+ -->
+ <!-- white theme -->
+<style>
+  body { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 2rem; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    line-height: 1.6; 
+    background: #fff; /* 白色背景 */
+    color: #333; /* 黑色文字 */
+  }
+  h1, h2, h3 { 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 0.3rem; 
+  }
+  code { 
+    background: #f5f5f5; 
+    padding: 0.2rem 0.4rem; 
+    border-radius: 4px; 
+  }
+  pre { 
+    background: #f5f5f5; 
+    padding: 1rem; 
+    border-radius: 4px; 
+    overflow-x: auto; 
+  }
+  blockquote { 
+    border-left: 4px solid #eee; 
+    padding-left: 1rem; 
+    color: #666; 
   }
 </style>
 </head>
