@@ -6,31 +6,34 @@ const marked = require('marked');
 function extractToc(mdContent) {
   const lines = mdContent.split('\n');
   const headings = [];
-  const headingMap = new Map(); // 用于跟踪重复ID，避免冲突
+  
+  // 使用简单可靠的ID生成方法
+  function generateId(text, index) {
+    // 方案1: 使用序号作为ID，简单可靠
+    return `heading-${index}`;
+    
+    // 方案2: 如果仍需基于文本的ID，可以使用以下更安全的实现
+    /*
+    // 保留中文字符和基本符号
+    let id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
+    // 将空格替换为连字符
+    id = id.replace(/\s+/g, '-');
+    // 添加索引作为后缀确保唯一性
+    return `${id}-${index}`;
+    */
+  }
   
   // 提取所有标题行
+  let headingIndex = 0;
   lines.forEach(line => {
     const match = line.match(/^(#{1,6})\s+(.+)$/);
     if (match) {
+      headingIndex++;
       const level = match[1].length; // 标题级别 1-6
       const text = match[2].trim(); // 标题文本
       
-      // 生成锚点ID - 使用更可靠的方法处理中文和特殊字符
-      // 移除所有特殊字符（除了中文字符、字母、数字、空格和连字符）
-      let id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
-      // 将多个空格或连字符替换为单个连字符
-      id = id.replace(/[\s-]+/g, '-');
-      // 移除首尾连字符
-      id = id.replace(/^-+|-+$/g, '');
-      
-      // 处理重复ID
-      if (headingMap.has(id)) {
-        const count = headingMap.get(id) + 1;
-        headingMap.set(id, count);
-        id = `${id}-${count}`;
-      } else {
-        headingMap.set(id, 1);
-      }
+      // 使用基于索引的简单ID
+      const id = generateId(text, headingIndex);
       
       headings.push({ level, text, id });
     }
@@ -80,15 +83,16 @@ function generateTocHtml(headings) {
 function createRenderer() {
   const renderer = new marked.Renderer();
   
-  // 重写heading方法，添加ID属性
+  // 创建一个简单的标题计数器来生成一致的ID
+let headingCounter = 0;
+
+// 重写heading方法，添加ID属性
   renderer.heading = function(text, level) {
-    // 使用与extractToc相同的ID生成算法，确保一致性
-    let escapedText = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
-    escapedText = escapedText.replace(/[\s-]+/g, '-');
-    escapedText = escapedText.replace(/^-+|-+$/g, '');
+    // 与extractToc保持完全相同的ID生成逻辑
+    headingCounter++;
+    const id = `heading-${headingCounter}`; // 使用与extractToc相同的简单ID生成方案
     
-    // 为了确保ID唯一性，我们在渲染时不需要跟踪重复，因为extractToc已经处理了
-    return `<h${level} id="${escapedText}">${text}</h${level}>`;
+    return `<h${level} id="${id}">${text}</h${level}>`;
   };
   
   return renderer;
@@ -154,6 +158,9 @@ function processDir(currentDir) {
     // 如果是 .md 文件，转换为 HTML
     if (path.extname(file) === '.md') {
       const mdContent = fs.readFileSync(filePath, 'utf8');
+      
+      // 重置标题计数器，确保每个文件都从1开始计数
+      headingCounter = 0;
       
       // 设置marked选项，使用自定义渲染器
       marked.setOptions({
