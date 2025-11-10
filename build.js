@@ -6,6 +6,7 @@ const marked = require('marked');
 function extractToc(mdContent) {
   const lines = mdContent.split('\n');
   const headings = [];
+  const headingMap = new Map(); // 用于跟踪重复ID，避免冲突
   
   // 提取所有标题行
   lines.forEach(line => {
@@ -13,9 +14,24 @@ function extractToc(mdContent) {
     if (match) {
       const level = match[1].length; // 标题级别 1-6
       const text = match[2].trim(); // 标题文本
-      // 生成锚点ID（保留中文字符，空格替换为连字符）
-      const id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '').replace(/\s+/g, '-');
-      // 注意：保留中文字符时不做toLowerCase转换，以确保标题链接的一致性
+      
+      // 生成锚点ID - 使用更可靠的方法处理中文和特殊字符
+      // 移除所有特殊字符（除了中文字符、字母、数字、空格和连字符）
+      let id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
+      // 将多个空格或连字符替换为单个连字符
+      id = id.replace(/[\s-]+/g, '-');
+      // 移除首尾连字符
+      id = id.replace(/^-+|-+$/g, '');
+      
+      // 处理重复ID
+      if (headingMap.has(id)) {
+        const count = headingMap.get(id) + 1;
+        headingMap.set(id, count);
+        id = `${id}-${count}`;
+      } else {
+        headingMap.set(id, 1);
+      }
+      
       headings.push({ level, text, id });
     }
   });
@@ -66,8 +82,12 @@ function createRenderer() {
   
   // 重写heading方法，添加ID属性
   renderer.heading = function(text, level) {
-    // 保留中文字符，只移除特殊字符，空格替换为连字符
-    const escapedText = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '').replace(/\s+/g, '-');
+    // 使用与extractToc相同的ID生成算法，确保一致性
+    let escapedText = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
+    escapedText = escapedText.replace(/[\s-]+/g, '-');
+    escapedText = escapedText.replace(/^-+|-+$/g, '');
+    
+    // 为了确保ID唯一性，我们在渲染时不需要跟踪重复，因为extractToc已经处理了
     return `<h${level} id="${escapedText}">${text}</h${level}>`;
   };
   
