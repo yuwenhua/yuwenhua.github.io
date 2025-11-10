@@ -2,6 +2,76 @@ const fs = require('fs');
 const path = require('path');
 const marked = require('marked');
 
+// 从Markdown内容中提取标题，生成目录结构
+function extractToc(mdContent) {
+  const lines = mdContent.split('\n');
+  const headings = [];
+  
+  // 提取所有标题行
+  lines.forEach(line => {
+    const match = line.match(/^(#{1,6})\s+(.+)$/);
+    if (match) {
+      const level = match[1].length; // 标题级别 1-6
+      const text = match[2].trim(); // 标题文本
+      // 生成锚点ID（转换为小写，空格替换为连字符）
+      const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      headings.push({ level, text, id });
+    }
+  });
+  
+  return headings;
+}
+
+// 将标题数组转换为HTML目录
+function generateTocHtml(headings) {
+  if (headings.length === 0) return '';
+  
+  let tocHtml = '<div class="toc" style="background: #f5f5f5; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">' +
+                '<h3 style="margin-top: 0;">目录</h3>' +
+                '<ul style="list-style: none; padding-left: 0;">';
+  
+  let lastLevel = 1;
+  
+  headings.forEach(heading => {
+    // 处理嵌套级别
+    if (heading.level > lastLevel) {
+      // 增加嵌套
+      for (let i = lastLevel; i < heading.level; i++) {
+        tocHtml += '<ul style="list-style: none; padding-left: 1.5rem;">';
+      }
+    } else if (heading.level < lastLevel) {
+      // 减少嵌套
+      for (let i = lastLevel; i > heading.level; i--) {
+        tocHtml += '</ul>';
+      }
+    }
+    
+    tocHtml += `<li><a href="#${heading.id}" style="text-decoration: none; color: #0366d6;">${heading.text}</a></li>`;
+    lastLevel = heading.level;
+  });
+  
+  // 关闭所有未闭合的ul标签
+  for (let i = lastLevel; i > 1; i--) {
+    tocHtml += '</ul>';
+  }
+  
+  tocHtml += '</ul></div>';
+  return tocHtml;
+}
+
+// 修改marked渲染器，为标题添加ID属性
+function createRenderer() {
+  const renderer = new marked.Renderer();
+  
+  // 重写heading方法，添加ID属性
+  renderer.heading = function(text, level) {
+    const escapedText = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    return `<h${level} id="${escapedText}">${text}</h${level}>`;
+  };
+  
+  return renderer;
+}
+
 // 源目录（仓库根目录）
 const srcDir = './';
 // 输出目录（Cloudflare Pages 部署目录）
@@ -62,7 +132,24 @@ function processDir(currentDir) {
     // 如果是 .md 文件，转换为 HTML
     if (path.extname(file) === '.md') {
       const mdContent = fs.readFileSync(filePath, 'utf8');
-      const htmlContent = marked.parse(mdContent); // Markdown 转 HTML
+      
+      // 设置marked选项，使用自定义渲染器
+      marked.setOptions({
+        renderer: createRenderer(),
+        breaks: true,
+        gfm: true
+      });
+      
+      // 转换Markdown为HTML
+      const htmlContent = marked.parse(mdContent);
+      
+      // 提取标题并生成目录
+      const headings = extractToc(mdContent);
+      const tocHtml = generateTocHtml(headings);
+      
+      // 将目录添加到HTML内容开头
+      const contentWithToc = tocHtml + htmlContent;
+      
       const htmlFileName = path.basename(file, '.md') + '.html'; // 同名 HTML 文件
       const outFilePath = path.join(distDir, path.relative(srcDir, currentDir), htmlFileName);
       
@@ -137,7 +224,7 @@ function processDir(currentDir) {
 </style>
 </head>
 <body>
-  <div class="markdown-body">${htmlContent}</div>
+  <div class="markdown-body">${contentWithToc}</div>
 </body>
 </html>
       `;
