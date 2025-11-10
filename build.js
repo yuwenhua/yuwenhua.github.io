@@ -13,8 +13,9 @@ function extractToc(mdContent) {
     if (match) {
       const level = match[1].length; // 标题级别 1-6
       const text = match[2].trim(); // 标题文本
-      // 生成锚点ID（转换为小写，空格替换为连字符）
-      const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      // 生成锚点ID（保留中文字符，空格替换为连字符）
+      const id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '').replace(/\s+/g, '-');
+      // 注意：保留中文字符时不做toLowerCase转换，以确保标题链接的一致性
       headings.push({ level, text, id });
     }
   });
@@ -65,7 +66,8 @@ function createRenderer() {
   
   // 重写heading方法，添加ID属性
   renderer.heading = function(text, level) {
-    const escapedText = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    // 保留中文字符，只移除特殊字符，空格替换为连字符
+    const escapedText = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '').replace(/\s+/g, '-');
     return `<h${level} id="${escapedText}">${text}</h${level}>`;
   };
   
