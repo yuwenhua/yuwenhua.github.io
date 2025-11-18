@@ -163,7 +163,8 @@ function processDir(currentDir) {
       
       // 只给usermanual.md和useragreement.md添加目录
       let contentWithToc = htmlContent;
-      if (file === 'usermanual.md' || file === 'useragreement.md') {
+      if (file === 'usermanual.md' || file === 'useragreement.md'
+        || file === 'privacy.md') {
         // 提取标题并生成目录
         const headings = extractToc(mdContent);
         const tocHtml = generateTocHtml(headings);
