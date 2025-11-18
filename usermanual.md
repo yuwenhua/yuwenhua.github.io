@@ -280,3 +280,4 @@
 
 
 # Apple Watch
+Watch 支持丢失模式、删除App和恢复出厂设置三项应急功能，操作方法和手机相同 <a href="./assets/watch_command.png"  target="_blank" rel="noopener noreferrer">手表界面</a>

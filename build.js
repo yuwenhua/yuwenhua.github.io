@@ -172,12 +172,14 @@ function processDir(currentDir) {
       // 转换Markdown为HTML
       const htmlContent = marked.parse(mdContent);
       
-      // 提取标题并生成目录
-      const headings = extractToc(mdContent);
-      const tocHtml = generateTocHtml(headings);
-      
-      // 将目录添加到HTML内容开头
-      const contentWithToc = tocHtml + htmlContent;
+      // 只给usermanual.md和useragreement.md添加目录
+      let contentWithToc = htmlContent;
+      if (file === 'usermanual.md' || file === 'useragreement.md') {
+        // 提取标题并生成目录
+        const headings = extractToc(mdContent);
+        const tocHtml = generateTocHtml(headings);
+        contentWithToc = tocHtml + htmlContent;
+      }
       
       const htmlFileName = path.basename(file, '.md') + '.html'; // 同名 HTML 文件
       const outFilePath = path.join(distDir, path.relative(srcDir, currentDir), htmlFileName);
