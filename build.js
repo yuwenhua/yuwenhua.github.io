@@ -9,18 +9,7 @@ function extractToc(mdContent) {
   
   // 使用简单可靠的ID生成方法
   function generateId(text, index) {
-    // 方案1: 使用序号作为ID，简单可靠
     return `heading-${index}`;
-    
-    // 方案2: 如果仍需基于文本的ID，可以使用以下更安全的实现
-    /*
-    // 保留中文字符和基本符号
-    let id = text.replace(/[^\w\s-\u4e00-\u9fa5]/g, '');
-    // 将空格替换为连字符
-    id = id.replace(/\s+/g, '-');
-    // 添加索引作为后缀确保唯一性
-    return `${id}-${index}`;
-    */
   }
   
   // 提取所有标题行
@@ -178,7 +167,18 @@ function processDir(currentDir) {
         // 提取标题并生成目录
         const headings = extractToc(mdContent);
         const tocHtml = generateTocHtml(headings);
-        contentWithToc = tocHtml + htmlContent;
+        
+        // 创建响应式布局结构，目录在桌面端显示在左侧，移动端显示在顶部
+        contentWithToc = `
+          <div class="container">
+            <div class="toc-sidebar">
+              ${tocHtml}
+            </div>
+            <div class="content">
+              ${htmlContent}
+            </div>
+          </div>
+        `;
       }
       
       const htmlFileName = path.basename(file, '.md') + '.html'; // 同名 HTML 文件
@@ -208,15 +208,76 @@ function processDir(currentDir) {
     background: #fff; 
     color: #333; 
   }
+  /* 响应式布局容器 */
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* 目录侧边栏样式 - 默认移动端样式 */
+  .toc-sidebar {
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* 内容区域样式 */
+  .content {
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  
   /* 文章容器：宽度100%，仅保留必要内边距 */
-  .markdown-body { 
-    width: 100%; 
+  .markdown-body {
+    width: 100%;
     max-width: 800px; /* 大屏时限制最大宽度，避免内容过宽 */
-    margin: 0 auto; 
-    padding: 1rem; /* 移动端内边距缩小，增加内容显示区域 */
+    margin: 0 auto;
+    padding: 1rem 0;
     box-sizing: border-box; /* 确保内边距不撑大容器 */
-    background: #fff !important; 
-    color: #333 !important; 
+    background: #fff !important;
+    color: #333 !important;
+  }
+  
+  /* 桌面端响应式布局 - 当屏幕宽度大于768px时应用 */
+  @media (min-width: 768px) {
+    .container {
+      flex-direction: row;
+    }
+    
+    /* 桌面端目录侧边栏样式 */
+    .toc-sidebar {
+      width: 280px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid #eee;
+      padding: 1rem;
+      background: #fff;
+    }
+    
+    /* 桌面端内容区域样式 */
+    .content {
+      margin-left: 280px;
+      width: calc(100% - 280px);
+      padding: 1rem;
+    }
+    
+    /* 桌面端目录样式调整 */
+    .toc-sidebar .toc {
+      background: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    /* 桌面端文章容器样式 */
+    .markdown-body {
+      padding: 1rem 0;
+    }
   }
   /* 标题：适配移动端字号 */
   h1, h2, h3 { 
