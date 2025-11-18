@@ -278,6 +278,5 @@
 
 用户可修改的选项包括用户名称和密码，修改资料需要在登录的10分钟内完成，否则会提示登录信息已过期，请重新登录。
 
-
 # Apple Watch
 Watch 支持丢失模式、删除App和恢复出厂设置三项应急功能，操作方法和手机相同 <a href="./assets/watch_command.png"  target="_blank" rel="noopener noreferrer">手表界面</a>
