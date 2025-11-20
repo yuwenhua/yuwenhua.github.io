@@ -1,5 +1,4 @@
-### 请<a href="./assets/support.jpeg" target="_blank" rel="noopener noreferrer">联系客服</a>我们将为您展示：
-
+### 如有需要，请联系客服，我们将您演示：
 
 - 设备列表：显示名称、在线状态、系统版本
 - 实时状态指示灯（绿/灰表示在线/离线）
