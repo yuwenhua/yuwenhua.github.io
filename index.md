@@ -77,7 +77,7 @@ SnapWipe致力于成为企业级苹果设备安全管理专家，帮助企业构
 
 ### 商务咨询
 
-- 电话：+86 18695631283
+- 电话：+86 I869563I283
 - 邮箱：business@bestmdm.com
 - 工作时间：周一至周五 9:00-18:00
 
@@ -91,3 +91,4 @@ SnapWipe致力于成为企业级苹果设备安全管理专家，帮助企业构
 福建省厦门市火炬高新区软件园创新大厦C区3F-A251
 
 <a href="https://d.bestmdm.com/usermanual" target="_blank" rel="noopener noreferrer">用户手册</a> |<a href="https://d.bestmdm.com/useragreement" target="_blank" rel="noopener noreferrer">用户协议</a> | <a href="https://d.bestmdm.com/privacy" target="_blank" rel="noopener noreferrer">隐私政策</a>
+
